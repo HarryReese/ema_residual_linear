@@ -1,36 +1,9 @@
 # EMA Residual Linear Ship Motion Prediction
 
-This repository contains the pre-acceptance core implementation of the model
-described in *A Lightweight Dual Branch Network with EMA Residual Learning for
+This repository contains  the model described in *A Lightweight Dual Branch Network with EMA Residual Learning for
 Multistep Ship Motion Prediction*.
 
-## Model
 
-The model combines two complementary paths after reversible instance
-normalization:
-
-```text
-Input [B, 750, 3]
-  ├─ causal EMA residual -> Patch64/Stride32 -> Channel-MLP -> Mamba -> forecast
-  └─ shared Linear(750, H) ------------------------------------------> forecast
-                                      sum -> inverse RevIN -> output [B, H, 3]
-```
-
-The three channels are heave, roll, and pitch. The paper evaluates prediction
-horizons of 20, 60, 100, 200, and 300 samples at a sampling interval of 0.05 s.
-
-## Paper configuration
-
-- history length: 750 samples (37.5 s)
-- prediction horizons: 20, 60, 100, 200, and 300 samples
-- hidden dimensions: `d_model=96`, `d_ff=192`
-- residual patches: length 64, stride 32
-- EMA coefficient: `alpha=0.3`
-- temporal encoder: one Mamba layer with `d_state=16`, `d_conv=4`, `expand=2`
-- channel interaction: learnable Channel-MLP coupling
-- loss: arctan-weighted MAE
-- chronological split: 70% train, 10% validation, 20% test
-- batch size: 48; maximum epochs: 150
 
 ## Installation
 
@@ -79,14 +52,5 @@ After training, evaluate the generated best checkpoint with:
 bash scripts/evaluate.sh
 ```
 
-`CHECKPOINT_PATH`, `DATA_FILE`, `PRED_LEN`, and `SEED` can be overridden through
-environment variables. Run `python run.py --help` for all core options.
 
-## Release scope
 
-This pre-acceptance release includes only the final model, the chronological
-data pipeline, training, evaluation, checkpoint saving, test metrics, and two
-portable entry scripts. Datasets, trained weights, detailed experiment records,
-paper figures, ablation code, alternative backbones, intermediate-output
-exports, complexity analysis, and latency analysis are reserved for the
-complete reproducibility release.
