@@ -1,7 +1,6 @@
 # EMA Residual Linear Ship Motion Prediction
 
-This repository contains  the model described in *A Lightweight Dual Branch Network with EMA Residual Learning for
-Multistep Ship Motion Prediction*.
+This repository contains  the model described in *A Lightweight Dual-Branch Network for Multistep Ship Motion Prediction*.
 
 
 
